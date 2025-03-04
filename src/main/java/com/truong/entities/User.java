@@ -1,12 +1,11 @@
 package com.truong.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.truong.entities.Department;
+import com.truong.enums.Role;
 
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -31,10 +30,13 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+
+		@Column(name = "role")
+		private Role role;
     
-    public boolean isAdmin() {
-        return this.department == null;
-    }
+//    public boolean isAdmin() {
+//        return this.department == null;
+//    }
 
 
 	public Long getId() {

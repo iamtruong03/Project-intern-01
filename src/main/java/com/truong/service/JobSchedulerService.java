@@ -1,11 +1,7 @@
 package com.truong.service;
 
-import com.truong.entities.Job;
 import com.truong.repository.JobRepository;
-import java.time.LocalDate;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service

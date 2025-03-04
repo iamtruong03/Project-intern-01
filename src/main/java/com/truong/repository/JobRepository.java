@@ -1,13 +1,10 @@
 package com.truong.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.truong.dto.UserDTO;
 import com.truong.entities.Job;
-import com.truong.entities.JobStatus;
 import com.truong.entities.User;
 
 import org.springframework.data.jpa.repository.Query;

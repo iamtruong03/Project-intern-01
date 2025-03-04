@@ -9,7 +9,7 @@ public class UserDTO {
 	private String password;
 	private String address;
 	private String nameDepartment;
-	private Long departmentId; // Thêm mới
+	private Long departmentId;
 
 	public static UserDTO fromEntity(User user) {
 		if (user == null) {

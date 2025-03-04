@@ -1,24 +1,17 @@
 package com.truong.service;
 
 import com.truong.repository.JobRepository;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.truong.dto.UserDTO;
 import com.truong.entities.Department;
-import com.truong.entities.Job;
 import com.truong.entities.User;
-import com.truong.exception.AppException;
-import com.truong.exception.ErrorCode;
 import com.truong.repository.DepartmentRepository;
 import com.truong.repository.JobExecutorsRepository;
 import com.truong.repository.UserRepository;
@@ -35,6 +28,8 @@ public class UserService {
 	private JobExecutorsRepository jobExecutorsRepository;
 	@Autowired
 	private DepartmentRepository departmentRepository;
+	@Autowired
+	private  PasswordEncoder passwordEncoder;
 
 	// lấy phòng ban của người dùng
 	public Long getDepartmentIdByUserId(Long userId) {
@@ -79,6 +74,7 @@ public class UserService {
 		if (!hasPermission) {
 			throw new RuntimeException("Bạn không có quyền tạo nhân viên trong phòng ban này!");
 		}
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 
