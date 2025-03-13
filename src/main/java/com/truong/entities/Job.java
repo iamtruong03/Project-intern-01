@@ -8,7 +8,11 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "job")
 public class Job {
@@ -33,54 +37,6 @@ public class Job {
 	@JoinColumn(name = "status_id")
 	private JobStatus jobStatus;
 
-	private LocalDate deadline; // Hạn chót công việc
-
-	public Long getJobId() {
-		return jobId;
-	}
-
-	public void setJobId(Long jobId) {
-		this.jobId = jobId;
-	}
-
-	public String getJobName() {
-		return jobName;
-	}
-
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
-	}
-
-	public Set<User> getExecutedUsers() {
-		return executedUsers;
-	}
-
-	public void setExecutedUsers(Set<User> executedUsers) {
-		this.executedUsers = executedUsers;
-	}
-
-	public User getApproverId() {
-		return approverId;
-	}
-
-	public void setApproverId(User approverId) {
-		this.approverId = approverId;
-	}
-
-	public JobStatus getJobStatus() {
-		return jobStatus;
-	}
-
-	public void setJobStatus(JobStatus jobStatus) {
-		this.jobStatus = jobStatus;
-	}
-
-	public LocalDate getDeadline() {
-		return deadline;
-	}
-
-	public void setDeadline(LocalDate deadline) {
-		this.deadline = deadline;
-	}
+	private LocalDate deadline;
 	
 }
