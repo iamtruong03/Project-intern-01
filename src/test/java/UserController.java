@@ -1,7 +1,7 @@
 package com.truong.controller;
 
 import com.truong.entities.Job;
-import com.truong.repository.UserRepository;
+import com.truong.repo.UserRepository;
 import com.truong.service.DepartmentService;
 import com.truong.service.JobService;
 import java.time.LocalDate;

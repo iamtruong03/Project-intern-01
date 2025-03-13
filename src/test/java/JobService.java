@@ -3,10 +3,10 @@ import com.truong.entities.Department;
 import com.truong.entities.Job;
 import com.truong.entities.JobStatus;
 import com.truong.entities.User;
-import com.truong.repository.DepartmentRepository;
-import com.truong.repository.JobRepository;
-import com.truong.repository.JobStatusRepository;
-import com.truong.repository.UserRepository;
+import com.truong.repo.DepartmentRepository;
+import com.truong.repo.JobRepository;
+import com.truong.repo.JobStatusRepository;
+import com.truong.repo.UserRepository;
 import com.truong.service.DepartmentService;
 
 import jakarta.transaction.Transactional;

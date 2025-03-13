@@ -4,7 +4,7 @@ import com.truong.dto.UserDTO;
 import com.truong.entities.Department;
 import com.truong.entities.Job;
 import com.truong.payload.UserFilter;
-import com.truong.repository.UserRepository;
+import com.truong.repo.UserRepository;
 import com.truong.service.DepartmentService;
 import com.truong.service.JobService;
 import java.time.LocalDate;
@@ -338,13 +338,13 @@ public class UserController {
 
 	// search user
 	@PostMapping("/searchUser")
-	public ResponseEntity<?> search(@RequestBody UserFilter filter) {
+	public ResponseEntity<?> search(@RequestBody UserFilter filter, @RequestParam Long userId) {
 		try {
-			return ResponseEntity.ok(userService.search(filter));
+			return ResponseEntity.ok(userService.search(userId, filter));
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Lỗi khi tìm kiếm user: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
+
 
 }

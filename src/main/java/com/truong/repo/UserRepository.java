@@ -1,4 +1,4 @@
-package com.truong.repository;
+package com.truong.repo;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +16,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findByUserName(String username);
 
-	@Query("SELECT pl FROM User pl " +
-			"WHERE (:search = '#' OR LOWER(pl.fullName) LIKE CONCAT('%', LOWER(:search), '%'))")
-	Optional<List<User>> searchAll(@Param("search") String search);
+//	@Query("SELECT pl FROM User pl " +
+//			"WHERE (:search = '#' OR LOWER(pl.fullName) LIKE CONCAT('%', LOWER(:search), '%'))")
+//	Optional<List<User>> searchAll(@Param("search") String search);
 
 	Optional<User> findByUserNameAndPassword(String userName, String password);
 

@@ -1,8 +1,7 @@
 package com.truong.service;
 
 import com.truong.payload.UserFilter;
-import com.truong.repository.JobRepository;
-import java.util.Collections;
+import com.truong.repo.JobRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Service;
 import com.truong.dto.UserDTO;
 import com.truong.entities.Department;
 import com.truong.entities.User;
-import com.truong.repository.DepartmentRepository;
-import com.truong.repository.JobExecutorsRepository;
-import com.truong.repository.UserRepository;
+import com.truong.repo.DepartmentRepository;
+import com.truong.repo.JobExecutorsRepository;
+import com.truong.repo.UserRepository;
 
 @Service
 public class UserService {
@@ -187,15 +186,12 @@ public class UserService {
 		userRepository.delete(userToDelete);
 	}
 
-	// tìm kiếm user
-	public List<UserDTO> search(UserFilter filter) {
-		return userRepository.searchAll(filter.getFullName())
-				.orElse(Collections.emptyList())
-				.stream()
-				.map(user -> new UserDTO(user))
+	// Tìm kiếm user
+	public List<UserDTO> search(Long userId, UserFilter filter) {
+		List<UserDTO> subUsers = getSubUsersByUserId(userId);
+		return subUsers.stream()
+				.filter(user -> user.getFullName().toLowerCase().contains(filter.getFullName().toLowerCase()))
 				.collect(Collectors.toList());
 	}
-
-
 
 }

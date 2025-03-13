@@ -36,14 +36,8 @@ public class User {
 
 		@Column(name = "role")
 		private Role role;
-    
-//    public boolean isAdmin() {
-//        return this.department == null;
-//    }
 
-
-
-	public User() {
-	}
+	  public User() {
+	  }
 
 }

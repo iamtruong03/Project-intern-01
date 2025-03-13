@@ -1,4 +1,4 @@
-package com.truong.repository;
+package com.truong.repo;
 
 import java.util.List;
 

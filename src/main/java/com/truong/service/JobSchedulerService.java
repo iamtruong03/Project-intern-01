@@ -1,6 +1,6 @@
 package com.truong.service;
 
-import com.truong.repository.JobRepository;
+import com.truong.repo.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

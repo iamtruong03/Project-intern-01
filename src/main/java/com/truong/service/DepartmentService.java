@@ -1,6 +1,6 @@
 package com.truong.service;
 
-import com.truong.repository.UserRepository;
+import com.truong.repo.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.truong.dto.UserDTO;
 import com.truong.entities.Department;
 import com.truong.entities.User;
-import com.truong.repository.DepartmentRepository;
+import com.truong.repo.DepartmentRepository;
 
 @Service
 public class DepartmentService {
