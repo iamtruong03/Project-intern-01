@@ -74,46 +74,35 @@ public class JobService {
 	// tao yeu cau duyet job
 	@Transactional
 	public Job createApproveJob(Long id, String jobName, LocalDate deadline) {
-		// Lấy thông tin user tạo job
 		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại!"));
 
-		// Lấy phòng ban của user
 		Department userDepartment = user.getDepartment();
 		if (userDepartment == null || userDepartment.getParentDepartment() == null) {
 			throw new RuntimeException("Không tìm thấy phòng ban cấp trên!");
 		}
 
-		// Tìm phòng ban cha (parent department)
 		Department parentDepartment = userDepartment.getParentDepartment();
 
-		// Lấy danh sách user thuộc phòng ban cha
 		List<User> approvers = userRepository.findByDepartment(parentDepartment);
 		if (approvers.isEmpty()) {
 			throw new RuntimeException("Không có người duyệt trong phòng ban cấp trên!");
 		}
 
-		// Chọn ngẫu nhiên một người duyệt
 		User approver = approvers.get(random.nextInt(approvers.size()));
 
-		// Lấy trạng thái mặc định có job_status_id = 2
 		JobStatus defaultStatus = jobStatusRepository.findById(2L)
 				.orElseThrow(() -> new RuntimeException("Trạng thái mặc định không tồn tại!"));
 
-		// Tạo job mới
 		Job job = new Job();
 		job.setJobName(jobName);
 		job.setDeadline(deadline);
 		job.setJobStatus(defaultStatus);
 		job.setApproverId(approver);
-
-		// Thêm user tạo vào danh sách người thực hiện
 		job.getExecutedUsers().add(user);
 
-		// Lưu job vào database
 		return jobRepository.save(job);
 	}
 
-	// lấy danh sách job của user
 	public List<Map<String, Object>> getJobsByExecutedId(Long id) {
 		User executedUser = userRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Người thực hiện không tồn tại!"));

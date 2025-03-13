@@ -15,7 +15,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //	Optional<User> findByUsernameAndPassword(String userName, String password);
 
 	Optional<User> findByUserName(String username);
-	
+
+	@Query("SELECT pl FROM User pl " +
+			"WHERE (:search = '#' OR LOWER(pl.fullName) LIKE CONCAT('%', LOWER(:search), '%'))")
+	Optional<List<User>> searchAll(@Param("search") String search);
+
 	Optional<User> findByUserNameAndPassword(String userName, String password);
 
 	@Query("SELECT u FROM User u WHERE u.department.departmentId IN :departmentIds")

@@ -1,7 +1,11 @@
 package com.truong.dto;
 
 import com.truong.entities.User;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class UserDTO {
 	private Long id;
 	private String fullName;
@@ -44,60 +48,17 @@ public class UserDTO {
 //		this.nameDepartment = nameDepartment;
 //	}
 
-	public Long getId() {
-		return id;
+	public UserDTO(User user) {
+		if (user != null) {
+			this.id = user.getId();
+			this.fullName = user.getFullName();
+			this.userName = user.getUserName();
+			this.password = user.getPassword();
+			this.address = user.getAddress();
+			this.nameDepartment = user.getDepartment() != null ? user.getDepartment().getNameDepartment() : null;
+			this.departmentId = user.getDepartment() != null ? user.getDepartment().getDepartmentId() : null;
+		}
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getNameDepartment() {
-		return nameDepartment;
-	}
-
-	public void setNameDepartment(String nameDepartment) {
-		this.nameDepartment = nameDepartment;
-	}
-
-	public Long getDepartmentId() {
-		return departmentId;
-	}
-
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
-	}
 	
 }

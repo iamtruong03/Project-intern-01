@@ -3,6 +3,7 @@ package com.truong.controller;
 import com.truong.dto.UserDTO;
 import com.truong.entities.Department;
 import com.truong.entities.Job;
+import com.truong.payload.UserFilter;
 import com.truong.repository.UserRepository;
 import com.truong.service.DepartmentService;
 import com.truong.service.JobService;
@@ -333,6 +334,17 @@ public class UserController {
 		}
 
 		return ResponseEntity.ok(response);
+	}
+
+	// search user
+	@PostMapping("/searchUser")
+	public ResponseEntity<?> search(@RequestBody UserFilter filter) {
+		try {
+			return ResponseEntity.ok(userService.search(filter));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Lỗi khi tìm kiếm user: " + e.getMessage());
+		}
 	}
 
 }

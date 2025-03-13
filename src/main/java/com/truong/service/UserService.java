@@ -1,13 +1,15 @@
 package com.truong.service;
 
+import com.truong.payload.UserFilter;
 import com.truong.repository.JobRepository;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.truong.dto.UserDTO;
 import com.truong.entities.Department;
@@ -28,8 +30,8 @@ public class UserService {
 	private JobExecutorsRepository jobExecutorsRepository;
 	@Autowired
 	private DepartmentRepository departmentRepository;
-	@Autowired
-	private  PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private  PasswordEncoder passwordEncoder;
 
 	// lấy phòng ban của người dùng
 	public Long getDepartmentIdByUserId(Long userId) {
@@ -74,7 +76,7 @@ public class UserService {
 		if (!hasPermission) {
 			throw new RuntimeException("Bạn không có quyền tạo nhân viên trong phòng ban này!");
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+//		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 
@@ -184,5 +186,16 @@ public class UserService {
 
 		userRepository.delete(userToDelete);
 	}
+
+	// tìm kiếm user
+	public List<UserDTO> search(UserFilter filter) {
+		return userRepository.searchAll(filter.getFullName())
+				.orElse(Collections.emptyList())
+				.stream()
+				.map(user -> new UserDTO(user))
+				.collect(Collectors.toList());
+	}
+
+
 
 }
