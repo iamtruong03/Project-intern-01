@@ -180,7 +180,7 @@ public class UserController {
 		}
 
 		try {
-			List<Map<String, Object>> jobs = jobService.getJobsOfSubordinates(userId);
+			List<Job> jobs = jobService.getJobsOfSubordinates(userId);
 			return ResponseEntity.ok(jobs);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());

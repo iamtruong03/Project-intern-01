@@ -1,10 +1,12 @@
 package com.truong.service;
 
+import com.truong.dto.JobDTO;
 import com.truong.dto.UserDTO;
 import com.truong.entities.Department;
 import com.truong.entities.Job;
 import com.truong.entities.JobStatus;
 import com.truong.entities.User;
+import com.truong.payload.JobFilter;
 import com.truong.repo.JobRepository;
 import com.truong.repo.JobStatusRepository;
 import com.truong.repo.UserRepository;
@@ -121,7 +123,7 @@ public class JobService {
 	}
 
 	// danh sách job của cấp dưới user
-	public List<Map<String, Object>> getJobsOfSubordinates(Long userId) {
+	public List<Job> getJobsOfSubordinates(Long userId) {
 		// Tìm người duyệt theo userId
 		User approver = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("Người duyệt không tồn tại!"));
@@ -139,25 +141,7 @@ public class JobService {
 		List<Long> subordinateIds = subordinateDTOs.stream().map(UserDTO::getId).toList();
 		List<User> subordinates = userRepository.findAllById(subordinateIds);
 
-		// Lấy danh sách công việc của cấp dưới
-		List<Job> jobs = jobRepository.findJobsOfSubordinates(approver, subordinates);
-
-		// Chuyển danh sách Job sang danh sách Map<String, Object>
-		return jobs.stream().map(job -> {
-			Map<String, Object> jobInfo = new HashMap<>();
-			jobInfo.put("id", job.getJobId());
-			jobInfo.put("name", job.getJobName());
-			jobInfo.put("jobStatusName", job.getJobStatus() != null ? job.getJobStatus().getJobStatusName() : null);
-			jobInfo.put("approverUsername", job.getApproverId() != null ? job.getApproverId().getFullName() : null);
-			jobInfo.put("deadline", job.getDeadline() != null ? job.getDeadline().toString() : null);
-
-			// Lấy danh sách tên của những người thực hiện
-			String executedUserNames = job.getExecutedUsers().stream().map(User::getFullName)
-					.collect(Collectors.joining(", "));
-			jobInfo.put("executedUserNames", executedUserNames);
-
-			return jobInfo;
-		}).collect(Collectors.toList());
+		return jobRepository.findJobsOfSubordinates(approver, subordinates);
 	}
 
 	@Transactional
@@ -186,20 +170,16 @@ public class JobService {
 		boolean isExecutor = job.getExecutedUsers().stream().anyMatch(user -> user.getId().equals(userId));
 		boolean isApprover = job.getApproverId().getId().equals(userId);
 
-		// **Người thực hiện** chỉ có thể cập nhật từ "Đang thực hiện" (1) → "Hoàn
-		// thành" (4)
 		if (isExecutor && currentStatus.getJobStatusId() == 1 && newStatusId == 4) {
 			job.setJobStatus(newStatus);
 			return jobRepository.save(job);
 		}
 
-		// **Người duyệt** có thể duyệt từ "Chờ duyệt" (2) → "Đang thực hiện" (1)
 		if (isApprover && currentStatus.getJobStatusId() == 2 && newStatusId == 1) {
 			job.setJobStatus(newStatus);
 			return jobRepository.save(job);
 		}
 
-		// **Người duyệt** có thể từ chối từ "Chờ duyệt" (2) → "Từ chối" (3)
 		if (isApprover && currentStatus.getJobStatusId() == 2 && newStatusId == 3) {
 			job.setJobStatus(newStatus);
 			return jobRepository.save(job);
@@ -244,6 +224,30 @@ public class JobService {
 		return result.stream().collect(Collectors.toMap(row -> ((JobStatus) row[0]).getJobStatusName(),
 
 				row -> (Long) row[1]));
+	}
+
+	public JobDTO convertToDTO(Job job) {
+		JobDTO dto = new JobDTO();
+		dto.setJobId(job.getJobId());
+		dto.setJobName(job.getJobName());
+		dto.setJobStatusName(job.getJobStatus() != null ? job.getJobStatus().getJobStatusName() : null);
+		dto.setApproverName(job.getApproverId() != null ? job.getApproverId().getFullName() : null);
+		List<String> executedNames = job.getExecutedUsers().stream()
+				.map(User::getFullName)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+		dto.setExecutedName(executedNames);
+		dto.setDeadline(job.getDeadline());
+		return dto;
+	}
+
+	// tim kiem job
+	public List<JobDTO> search(Long userId, JobFilter filter) {
+		List<Job> jobs = getJobsOfSubordinates(userId);
+		return jobs.stream()
+				.filter(job -> job.getJobName().toLowerCase().contains(filter.getJobName().toLowerCase()))
+				.map(this::convertToDTO)
+				.collect(Collectors.toList());
 	}
 
 }

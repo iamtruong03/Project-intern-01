@@ -10,33 +10,36 @@ import com.truong.entities.Department;
 import com.truong.entities.User;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "department")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "departmentId")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Department {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
-    private Long departmentId;
+    Long departmentId;
 
     @Column(name = "name_department", nullable = false)
-    private String nameDepartment;
+    String nameDepartment;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
     @JsonIgnore
-    private Department parentDepartment;
+    Department parentDepartment;
 
     @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Department> subDepartments;
+    List<Department> subDepartments;
     
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users;
+    List<User> users;
     
 }
 	
