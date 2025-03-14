@@ -1,0 +1,2 @@
+- CRUD Department/ User/ Job: Decentralize authority by department/ Create jobs for subordinates/ Create job approval requests - job approvals
+- Export job excel report
