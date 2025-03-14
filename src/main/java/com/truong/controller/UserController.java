@@ -121,7 +121,6 @@ public class UserController {
 
 			Job job = jobService.createJob(jobName, deadline, createdUserId, executedUserIdsLong);
 
-			// Trả về JSON đúng định dạng mà FE mong đợi
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(Map.of("success", true, "message", "Tạo công việc thành công!", "job", job));
 		} catch (Exception e) {

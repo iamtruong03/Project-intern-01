@@ -38,20 +38,13 @@ public class JobAPI {
       if (jobs.isEmpty()) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Không có công việc để xuất");
       }
-
       String filePath = jobExport.exportJobsToExcel(jobs);
-
-      Path path = Paths.get(filePath);
-      byte[] excelData = Files.readAllBytes(path);
-
-      return ResponseEntity.ok()
-          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Job_Report.xlsx")
-          .contentType(MediaType.APPLICATION_OCTET_STREAM)
-          .body(excelData);
+      return ResponseEntity.ok("Xuất báo cáo thành công. File lưu tại: " + filePath);
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi xuất báo cáo: " + e.getMessage());
     }
   }
+
 
   // API tìm kiếm công việc
   @PostMapping("/searchJob")

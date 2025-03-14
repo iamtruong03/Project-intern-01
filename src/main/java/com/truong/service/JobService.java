@@ -29,6 +29,8 @@ public class JobService {
 	private JobStatusRepository jobStatusRepository;
 	@Autowired
 	private DepartmentService departmentService;
+	@Autowired
+	private UserService userService;
 	private final Random random = new Random();
 
 	// tạo job cho cấp dưới
@@ -60,7 +62,7 @@ public class JobService {
 			executedUsers.add(executedUser);
 		}
 
-		JobStatus defaultStatus = jobStatusRepository.findByJobStatusName("IN_PROGRESS")
+		JobStatus defaultStatus = jobStatusRepository.findJobStatusByJobStatusId(1L)
 				.orElseThrow(() -> new RuntimeException("Trạng thái mặc định không tồn tại!"));
 
 		Job job = new Job();
@@ -124,25 +126,20 @@ public class JobService {
 
 	// danh sách job của cấp dưới user
 	public List<Job> getJobsOfSubordinates(Long userId) {
-		// Tìm người duyệt theo userId
 		User approver = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("Người duyệt không tồn tại!"));
 
-		// Lấy danh sách nhân viên cấp dưới dưới dạng DTO
-		List<UserDTO> subordinateDTOs = departmentService
-				.getUsersByDepartment(approver.getDepartment().getDepartmentId());
-
-		// Nếu không có nhân viên cấp dưới, trả về danh sách rỗng
+		List<UserDTO> subordinateDTOs = userService.getSubUsersByUserId(userId);
 		if (subordinateDTOs.isEmpty()) {
 			return List.of();
 		}
 
-		// Chuyển đổi danh sách UserDTO thành danh sách User
 		List<Long> subordinateIds = subordinateDTOs.stream().map(UserDTO::getId).toList();
 		List<User> subordinates = userRepository.findAllById(subordinateIds);
 
 		return jobRepository.findJobsOfSubordinates(approver, subordinates);
 	}
+
 
 	@Transactional
 	public Job updateJobStatus(Long jobId, Long userId, Long newStatusId) {

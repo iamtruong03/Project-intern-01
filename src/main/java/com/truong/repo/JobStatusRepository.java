@@ -8,5 +8,6 @@ import com.truong.entities.JobStatus;
 
 public interface JobStatusRepository extends JpaRepository<JobStatus, Long>{
 	Optional<JobStatus> findByJobStatusName(String jobStatusName);
+	Optional<JobStatus> findJobStatusByJobStatusId(Long id);
 
 }

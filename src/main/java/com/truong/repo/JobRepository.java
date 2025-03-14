@@ -14,9 +14,11 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 	List<Job> findByExecutedUsersContaining(User user);
 
 	@Query("SELECT j FROM Job j LEFT JOIN j.executedUsers e "
-			+ "WHERE j.approverId = :approver OR e IN :subordinateUsers")
+			+ "WHERE j.approverId = :approver OR e IN :subordinateUsers "
+			+ "OR j.approverId IN :subordinateUsers")
 	List<Job> findJobsOfSubordinates(@Param("approver") User approver,
 			@Param("subordinateUsers") List<User> subordinateUsers);
+
 
 	@Query("SELECT j.jobStatus, COUNT(DISTINCT j) " + "FROM Job j JOIN j.executedUsers u "
 			+ "WHERE u.id IN :subordinateIds " + "GROUP BY j.jobStatus")
