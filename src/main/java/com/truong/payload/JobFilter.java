@@ -16,4 +16,6 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JobFilter {
   String jobName;
+  String exportType; // (pdf || excel)
+  Boolean exportAll; // (pdf || excel)
 }
